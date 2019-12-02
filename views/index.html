@@ -1,9 +1,138 @@
+
+
+
+
 <!DOCTYPE html>
+
 <html lang="en">
-    <head>
-        <title>DELI-VERY</title>
-    </head>
-    <body>
-        <h1>Hello World!!!</h1>
-    </body>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="/socket.io/socket.io.js" defer></script>
+  <script src="/vue/vue.js" defer></script>
+  <script type="text/javascript" src="js/menu.js"></script>
+  <script src="js/vue_script.js" defer></script>
+
+
+  <!--    <link rel="stylesheet" type="text/css" href="css/reset.css"> -->
+  <title>Order the best burger</title>
+
+</head>
+<body>
+  <!--<div class="box header">-->
+  <header>
+    <img src="https://c.pxhere.com/photos/32/87/burgers_fast_food_food_hamburger_restaurant_table_unhealthy-981692.jpg!d" width="100%">
+    <h1> Welcome to Best Burgers </h1>
+    <!--https://cdn.pixabay.com/photo/2019/05/19/22/31/burger-4215450_960_720.jpg-->
+  </header>
+  <main id="myMeny">
+
+    <section>
+      <div id="Orderid">
+        <h2> Select burger </h2>
+        <p> Choose the best burger here. </p>
+          <div class="wrapper">
+
+                <div v-for="burger in burgers">
+
+                  <h3>  {{burger.name}} </h3>
+                  <img v-bind:src="burger.img"width="250">
+                <ul>
+                <li v-if="burger.gluten">This burger contains <span class="bolded">gluten</span></li>
+                <li v-if="burger.lactose">This burger contains <span class="bolded">lactose</span></li>
+                <li v-if="burger.vegan">This burger is vegan</li>
+                <h4><span> Add to order: <input type="checkbox" v-model="checked" v-bind:value="burger.name"></span></h4>
+
+              </ul>
+
+              </div>
+        </div>
+      </section>
+      <section>
+        <div id="Customer">
+          <h2> Customer information </h2>
+          <p> Give us the information we need to deliver the best burger! </p>
+          <h3> Delivery information: </h3>
+          <form>
+            <p>
+              <label for="Full name">Full name</label><br>
+              <input v-model="orderinformation.fullname" type="text" id="firstname" name="fn" required="required" placeholder="First- and last name">
+            </p>
+            <p>
+              <label for="Email">Email</label><br>
+              <input v-model="orderinformation.email" type="Email" id="email" name="email" required="required" placeholder="Email adress">
+            </p>
+          <!--  <p>
+              <label for="Street">Street</label><br>
+              <input v-model="street" type="Street" id="email" name="Street" required="required" placeholder="Street name">
+            </p>
+            <p>
+              <label for="House">House</label><br>
+              <input v-model="house" type="House" id="House" name="House" required="required" placeholder="House number">
+            </p>-->
+            <p>
+              <label for="Payment method">Payment method</label><br>
+              <select v-model="orderinformation.paymentmethod" id="Payment method" name="Payment method">
+                <option selected>Credit card</option>
+                <option>Cash</option>
+                <option>Swish</option>
+                <option>Pay later</option>
+              </select>
+            </p>
+            <p>
+              <label for="Gender">Gender</label><br>
+              <input v-model="gender" type="radio" name="Gender" value="Female"> Female<br>
+              <input v-model="gender" type="radio" name="Gender" value="Male"> Male<br>
+              <input v-model="gender" checked type="radio" name="Gender" value="Do not wish to provide"> Do not wish to provide<br>
+            </select>
+          </p>
+        </form>
+
+        <!--kartan-->
+        <h1> Where do you want the food to be delivered? </h1>
+        <h3> Click on the map!</h3>
+        <a href="/dispatcher" target="_blank">Open dispatcher in new window</a>.
+        <div class="view-box">
+          <div id="dots" v-on:click="displayOrder">
+              <div v-bind:style="{ left: display.x + 'px', top: display.y + 'px'}">
+                T
+              </div>
+          </div>
+        </div>
+
+
+
+        <button v-on:click= "addOrder()" v-if="checked.length>0">
+          <img src="https://cdn.pixabay.com/photo/2014/04/03/11/49/hamburger-312233_960_720.png" width="30"> Order the best burger!
+        </button>
+
+      </div>
+    </section>
+
+       <div v-if="showSummary">
+      <h3>Check your order</h3>
+    <!--  <div
+          v-for:"myorder in bestburgerorder">
+        {{myorder}}</div>-->
+
+        <span>Your order: <span v-for="value in checked">{{value}}{{", "}}</span></span>
+          <h5>My delivery information</h5>
+        <p>
+          <dd v-for ="(value,key) in orderinformation">{{key}}{{": "}}{{value}}</dd>
+          <p>
+        <!--Meny: {{this.checked}}<br>
+        Full name: {{this.orderinformation.fullname}}<br>
+        Email: {{this.orderinformation.email}}<br>
+        Paymentmethod: {{this.orderinformation.paymentmethod}}<br>-->
+             Gender: {{this.gender}}<br>
+             Position:{{this.display.x}} {{this.display.y}}
+      <!--  Delivery adress: {{this.house}}{{this.street}}<br>-->
+    </div>
+  </main>
+  <footer>
+    <p> Posted by: Elsa </p>
+    <p> Contact information:<a href="bestburger@examplemail.com">  bestburger@examplemail.com </a> </p>
+  </footer>
+</body>
 </html>
